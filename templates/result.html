@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Match | Results</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='results.css') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@400;600;700;800&family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="stars"></div>
+    <div class="twinkling"></div>
+    
+    <div class="container">
+        <div class="results-card">
+            <div class="card-content">
+                <div class="reveal-container">
+                    <div class="reveal-header">
+                      
+                        <h1 class="title">Your Soul Match</h1>
+                    </div>
+                    
+                    <div class="character-reveal">
+                         <div class="character-frame">
+                            <div class="character-image">
+                                 
+                               <img src="https://www.google.com/imgres?q=anime&imgurl=https%3A%2F%2Fwww.hindustantimes.com%2Fht-img%2Fimg%2F2023%2F02%2F15%2F1600x900%2FDeath_Note_is_usually_the_first_anime__1676437361142_1676437361490_1676437361490.jpg&imgrefurl=https%3A%2F%2Fwww.hindustantimes.com%2Fentertainment%2Fanime%2Ffrom-death-note-to-erased-top-10-short-anime-series-for-beginners-101676436279182.html&docid=UL3Vyf5mvFDGQM&tbnid=fS5O4nX8fL87jM&vet=12ahUKEwi2-d2xnOKMAxVciq8BHUXLMHEQM3oECCgQAA..i&w=1600&h=900&hcb=2&ved=2ahUKEwi2-d2xnOKMAxVciq8BHUXLMHEQM3oECCgQAA" alt="{{ character }}"> 
+                                <div class="character-silhouette">
+                                    <div class="character-glow"></div>
+                                </div>
+                            </div>
+                            
+                            <div class="character-name-container">
+                                <div class="name-decoration left"></div>
+                                <h2 class="character-name">{{ character }}</h2>
+                                <div class="name-decoration right"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="character-traits">
+                            <div class="trait-item">
+                                <div class="trait-icon personality"></div>
+                                <div class="trait-text">
+                                    <h3>Personality</h3>
+                                    <p>{{ traits.personality if traits is defined else "Strong-willed and determined" }}</p>
+                                </div>
+                            </div>
+                            
+                            <div class="trait-item">
+                                <div class="trait-icon strengths"></div>
+                                <div class="trait-text">
+                                    <h3>Strengths</h3>
+                                    <p>{{ traits.strengths if traits is defined else "Loyalty, courage, and perseverance" }}</p>
+                                </div>
+                            </div>
+                            
+                            <div class="trait-item">
+                                <div class="trait-icon quote"></div>
+                                <div class="trait-text">
+                                    <h3>Famous Quote</h3>
+                                    <p class="character-quote">"{{ traits.quote if traits is defined else "I never give up – that's my ninja way!" }}"</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="share-section">
+                       
+                        <div class="share-buttons">
+                           
+                        </div>
+                    </div>
+                    
+                    <div class="action-buttons">
+                        <a href="/" class="action-btn try-again">
+                            <span class="btn-text">Take Quiz Again</span>
+                            <span class="btn-icon">↺</span>
+                        </a>
+                        <a href="#" class="action-btn explore">
+                            <span class="btn-text">Explore More</span>
+                            <span class="btn-icon">→</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="decorative-elements">
+            <div class="floating-element element-1"></div>
+            <div class="floating-element element-2"></div>
+            <div class="floating-element element-3"></div>
+        </div>
+    </div>
+    
+    <script>
+        // Animation sequence on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            setTimeout(() => {
+                document.querySelector('.reveal-header').classList.add('animate');
+                
+                setTimeout(() => {
+                    document.querySelector('.character-frame').classList.add('animate');
+                    
+                    setTimeout(() => {
+                        document.querySelector('.character-traits').classList.add('animate');
+                        
+                        setTimeout(() => {
+                            document.querySelector('.share-section').classList.add('animate');
+                            document.querySelector('.action-buttons').classList.add('animate');
+                            
+                            // Animate decorative elements
+                            document.querySelectorAll('.floating-element').forEach(el => {
+                                el.classList.add('animate');
+                            });
+                        }, 600);
+                    }, 800);
+                }, 400);
+            }, 300);
+        });
+        
+        // Copy result function
+        function copyResult() {
+            const character = "{{ character }}";
+            const textToCopy = `I took the Anime Personality Quiz and I'm most like ${character}! Take the quiz to find your anime match!`;
+            
+            navigator.clipboard.writeText(textToCopy).then(() => {
+                const copyBtn = document.querySelector('.copy');
+                copyBtn.textContent = 'Copied!';
+                
+                setTimeout(() => {
+                    copyBtn.textContent = 'Copy Link';
+                }, 2000);
+            });
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Select Your Quiz Theme</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@400;600;700;800&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* ===== VARIABLES ===== */
+        :root {
+            --primary: #8a2be2; /* Vibrant purple */
+            --primary-light: #b76eff;
+            --primary-dark: #6a0dad;
+            --secondary: #ff3e78; /* Hot pink */
+            --secondary-light: #ff71a3;
+            --accent: #00e5ff; /* Cyan */
+            --accent-dark: #00b8d4;
+            --text: #ffffff;
+            --text-secondary: #e0e0ff;
+            --background: #0a0a20;
+            --card-bg: rgba(25, 25, 65, 0.85);
+            --card-border: rgba(138, 43, 226, 0.3);
+            --option-bg: rgba(30, 30, 80, 0.7);
+            --option-hover: rgba(50, 50, 120, 0.8);
+            --shadow: 0 8px 32px rgba(138, 43, 226, 0.3);
+            --glow: 0 0 15px rgba(138, 43, 226, 0.5);
+            --border-radius: 16px;
+        }
+
+        /* ===== RESET & BASE STYLES ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: "Poppins", sans-serif;
+            background-color: var(--background);
+            color: var(--text);
+            line-height: 1.6;
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+            padding: 0;
+        }
+
+        /* ===== ANIMATED BACKGROUND ===== */
+        .stars, .twinkling {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -10;
+        }
+
+        .stars {
+            background: #000 url("https://i.imgur.com/YKY28eT.png") repeat top center;
+            z-index: -11;
+        }
+
+        .twinkling {
+            background: transparent url("https://i.imgur.com/XYMF4ca.png") repeat top center;
+            animation: move-twink-back 200s linear infinite;
+        }
+
+        @keyframes move-twink-back {
+            from { background-position: 0 0; }
+            to { background-position: -10000px 5000px; }
+        }
+
+        /* ===== CONTAINER & LAYOUT ===== */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* ===== HEADER ===== */
+        .header {
+            text-align: center;
+            padding: 40px 20px 30px;
+            position: relative;
+            margin-bottom: 50px;
+        }
+
+        .logo {
+            position: absolute;
+            top: -25px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 70px;
+            height: 70px;
+            background: var(--secondary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 20px rgba(255, 62, 120, 0.7);
+            z-index: 2;
+        }
+
+        .logo-icon {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: white;
+            text-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+        }
+
+        .title {
+            font-family: "Exo 2", sans-serif;
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 15px;
+            background: linear-gradient(to right, var(--accent), var(--text));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 0 0 15px rgba(0, 229, 255, 0.3);
+            letter-spacing: -0.5px;
+            position: relative;
+            display: inline-block;
+        }
+
+        .title::after {
+            content: "";
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 3px;
+            background: linear-gradient(to right, var(--accent), var(--secondary));
+            border-radius: 3px;
+        }
+
+        .subtitle {
+            color: var(--text-secondary);
+            font-size: 1.2rem;
+            font-weight: 300;
+            letter-spacing: 1px;
+            margin-top: 20px;
+            opacity: 0.9;
+        }
+
+        /* ===== THEME CARDS ===== */
+        .card-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .theme-card {
+            background-color: var(--card-bg);
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--card-border);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            cursor: pointer;
+            position: relative;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .theme-card::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, transparent 0%, rgba(138, 43, 226, 0.1) 100%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: 1;
+        }
+
+        .theme-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 15px 30px rgba(138, 43, 226, 0.4);
+        }
+
+        .theme-card:hover::before {
+            opacity: 1;
+        }
+
+        .theme-card:hover .card-glow {
+            opacity: 1;
+        }
+
+        .card-glow {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            box-shadow: 0 0 30px rgba(138, 43, 226, 0.5) inset;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .card-content {
+            padding: 25px;
+            position: relative;
+            z-index: 2;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .theme-icon {
+            width: 60px;
+            height: 60px;
+            margin: 0 auto 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background: rgba(0, 229, 255, 0.1);
+            position: relative;
+        }
+
+        .theme-icon::before {
+            content: "";
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: contain;
+            opacity: 0.8;
+        }
+
+        .anime-icon::before {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%2300e5ff'%3E%3Cpath d='M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z'/%3E%3C/svg%3E");
+        }
+
+        .fruit-icon::before {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23ff3e78'%3E%3Cpath d='M7 10c-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4-1.79-4-4-4zm0 6c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm8-6c-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4-1.79-4-4-4zm0 6c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm-4-12c-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4-1.79-4-4-4zm0 6c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2z'/%3E%3C/svg%3E");
+        }
+
+        .color-icon::before {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%238a2be2'%3E%3Cpath d='M12 3c-4.97 0-9 4.03-9 9s4.03 9 9 9c.83 0 1.5-.67 1.5-1.5 0-.39-.15-.74-.39-1.01-.23-.26-.38-.61-.38-.99 0-.83.67-1.5 1.5-1.5H16c2.76 0 5-2.24 5-5 0-4.42-4.03-8-9-8zm-5.5 9c-.83 0-1.5-.67-1.5-1.5S5.67 9 6.5 9 8 9.67 8 10.5 7.33 12 6.5 12zm3-4C8.67 8 8 7.33 8 6.5S8.67 5 9.5 5s1.5.67 1.5 1.5S10.33 8 9.5 8zm5 0c-.83 0-1.5-.67-1.5-1.5S13.67 5 14.5 5s1.5.67 1.5 1.5S15.33 8 14.5 8zm3 4c-.83 0-1.5-.67-1.5-1.5S16.67 9 17.5 9s1.5.67 1.5 1.5-.67 1.5-1.5 1.5z'/%3E%3C/svg%3E");
+        }
+
+        .hp-icon::before {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23b76eff'%3E%3Cpath d='M12 2L4.5 20.29l.71.71L12 18l6.79 3 .71-.71z'/%3E%3C/svg%3E");
+        }
+
+        .creature-icon::before {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%2300b8d4'%3E%3Cpath d='M22 3H7c-.69 0-1.23.35-1.59.88L0 12l5.41 8.11c.36.53.9.89 1.59.89h15c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-3 12.5c0 .83-.67 1.5-1.5 1.5s-1.5-.67-1.5-1.5.67-1.5 1.5-1.5 1.5.67 1.5 1.5z'/%3E%3C/svg%3E");
+        }
+
+        .dessert-icon::before {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23ff71a3'%3E%3Cpath d='M12 6c1.11 0 2-.9 2-2 0-.38-.1-.73-.29-1.03L12 0l-1.71 2.97c-.19.3-.29.65-.29 1.03 0 1.1.9 2 2 2zm4.6 9.99l-1.07-1.07-1.08 1.07c-1.3 1.3-3.58 1.31-4.89 0l-1.07-1.07-1.09 1.07C6.75 16.64 5.88 17 4.96 17c-.73 0-1.4-.23-1.96-.61V21c0 .55.45 1 1 1h16c.55 0 1-.45 1-1v-4.61c-.56.38-1.23.61-1.96.61-.92 0-1.79-.36-2.44-1.01zM18 9h-5V7h-2v2H6c-1.66 0-3 1.34-3 3v1.54c0 1.08.88 1.96 1.96 1.96.52 0 1.02-.2 1.38-.57l2.14-2.13 2.13 2.13c.74.74 2.03.74 2.77 0l2.14-2.13 2.13 2.13c.37.37.86.57 1.38.57 1.08 0 1.96-.88 1.96-1.96V12C21 10.34 19.66 9 18 9z'/%3E%3C/svg%3E");
+        }
+
+        .theme-title {
+            font-family: "Exo 2", sans-serif;
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+            color: var(--text);
+            text-align: center;
+            position: relative;
+            padding-bottom: 12px;
+        }
+
+        .theme-title::after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 40px;
+            height: 2px;
+            background: linear-gradient(to right, var(--accent), transparent);
+            border-radius: 2px;
+        }
+
+        .theme-desc {
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+            text-align: center;
+            margin-bottom: 25px;
+            flex-grow: 1;
+        }
+
+        .card-form {
+            margin: 0;
+            width: 100%;
+        }
+
+        .start-btn {
+            width: 100%;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 30px;
+            background: linear-gradient(to right, var(--primary), var(--primary-dark));
+            color: white;
+            font-family: "Exo 2", sans-serif;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .start-btn::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to right, rgba(255, 255, 255, 0.1), transparent);
+            transform: translateX(-100%);
+            transition: transform 0.5s ease;
+        }
+
+        .start-btn:hover::before {
+            transform: translateX(0);
+        }
+
+        .start-btn:hover {
+            box-shadow: 0 0 20px rgba(138, 43, 226, 0.4);
+            transform: translateY(-2px);
+        }
+
+        .btn-text, .btn-icon {
+            position: relative;
+            z-index: 1;
+        }
+
+        .btn-icon {
+            font-size: 1.2rem;
+            transition: transform 0.3s ease;
+        }
+
+        .start-btn:hover .btn-icon {
+            transform: translateX(5px);
+        }
+
+        /* ===== CARD THEMES ===== */
+        .anime-card {
+            border-top: 3px solid var(--accent);
+        }
+
+        .fruit-card {
+            border-top: 3px solid var(--secondary);
+        }
+
+        .color-card {
+            border-top: 3px solid var(--primary-light);
+        }
+
+        .hp-card {
+            border-top: 3px solid var(--primary);
+        }
+
+        .creature-card {
+            border-top: 3px solid var(--accent-dark);
+        }
+
+        .dessert-card {
+            border-top: 3px solid var(--secondary-light);
+        }
+
+        /* ===== FOOTER ===== */
+        .footer {
+            text-align: center;
+            padding: 30px 0;
+            margin-top: 50px;
+            color: var(--text-secondary);
+            opacity: 0.7;
+            font-size: 0.9rem;
+            position: relative;
+        }
+
+        .decorative-line {
+            height: 1px;
+            background: linear-gradient(to right, transparent, var(--primary-light), transparent);
+            margin-bottom: 20px;
+        }
+
+        /* ===== RESPONSIVE DESIGN ===== */
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px 15px;
+            }
+
+            .title {
+                font-size: 2.5rem;
+            }
+
+            .subtitle {
+                font-size: 1rem;
+            }
+
+            .card-container {
+                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+                gap: 20px;
+                padding: 10px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .title {
+                font-size: 2rem;
+            }
+
+            .card-container {
+                grid-template-columns: 1fr;
+            }
+
+            .theme-title {
+                font-size: 1.2rem;
+            }
+        }
+
+        /* ===== ANIMATIONS ===== */
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .floating {
+            animation: float 6s infinite ease-in-out;
+        }
+
+        .pulsing {
+            animation: pulse 3s infinite ease-in-out;
+        }
+    </style>
+</head>
+<body>
+    <!-- Animated Background -->
+    <div class="stars"></div>
+    <div class="twinkling"></div>
+    
+    <div class="container">
+        <header class="header">
+            <div class="logo">
+                <div class="logo-icon">Q</div>
+            </div>
+            <h1 class="title">Choose Your Adventure</h1>
+            <p class="subtitle">Discover which character, creature, or object matches your personality</p>
+        </header>
+        
+        <div class="card-container">
+            <!-- Anime -->
+            <div class="theme-card anime-card">
+                <div class="card-glow"></div>
+                <div class="card-content">
+                    <div class="theme-icon anime-icon"></div>
+                    <h2 class="theme-title">Anime Character</h2>
+                    <p class="theme-desc">Find your inner anime soul—Naruto, Goku, or Lelouch?</p>
+                    <form action="/quiz" method="get" class="card-form">
+                        <input type="hidden" name="theme" value="anime">
+                        <button type="submit" class="start-btn">
+                            <span class="btn-text">Start Quiz</span>
+                            <span class="btn-icon">→</span>
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Fruit -->
+            <div class="theme-card fruit-card">
+                <div class="card-glow"></div>
+                <div class="card-content">
+                    <div class="theme-icon fruit-icon"></div>
+                    <h2 class="theme-title">Fruit Personality</h2>
+                    <p class="theme-desc">Are you a zesty pineapple or a laid-back banana?</p>
+                    <form action="/quiz" method="get" class="card-form">
+                        <input type="hidden" name="theme" value="fruit">
+                        <button type="submit" class="start-btn">
+                            <span class="btn-text">Start Quiz</span>
+                            <span class="btn-icon">→</span>
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Color -->
+            <div class="theme-card color-card">
+                <div class="card-glow"></div>
+                <div class="card-content">
+                    <div class="theme-icon color-icon"></div>
+                    <h2 class="theme-title">Soul Color</h2>
+                    <p class="theme-desc">From fiery red to chill blue—discover your hue.</p>
+                    <form action="/quiz" method="get" class="card-form">
+                        <input type="hidden" name="theme" value="color">
+                        <button type="submit" class="start-btn">
+                            <span class="btn-text">Start Quiz</span>
+                            <span class="btn-icon">→</span>
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Harry Potter -->
+            <div class="theme-card hp-card">
+                <div class="card-glow"></div>
+                <div class="card-content">
+                    <div class="theme-icon hp-icon"></div>
+                    <h2 class="theme-title">Harry Potter Character</h2>
+                    <p class="theme-desc">Wizard, witch, or muggle—where do you belong?</p>
+                    <form action="/quiz" method="get" class="card-form">
+                        <input type="hidden" name="theme" value="hp">
+                        <button type="submit" class="start-btn">
+                            <span class="btn-text">Start Quiz</span>
+                            <span class="btn-icon">→</span>
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Mythical Creature -->
+            <div class="theme-card creature-card">
+                <div class="card-glow"></div>
+                <div class="card-content">
+                    <div class="theme-icon creature-icon"></div>
+                    <h2 class="theme-title">Mythical Creature</h2>
+                    <p class="theme-desc">Dragon, unicorn, phoenix, or mermaid—uncover your magic.</p>
+                    <form action="/quiz" method="get" class="card-form">
+                        <input type="hidden" name="theme" value="creature">
+                        <button type="submit" class="start-btn">
+                            <span class="btn-text">Start Quiz</span>
+                            <span class="btn-icon">→</span>
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Dessert -->
+            <div class="theme-card dessert-card">
+                <div class="card-glow"></div>
+                <div class="card-content">
+                    <div class="theme-icon dessert-icon"></div>
+                    <h2 class="theme-title">Dessert Match</h2>
+                    <p class="theme-desc">Are you a sweet cupcake or a fiery jalapeño brownie?</p>
+                    <form action="/quiz" method="get" class="card-form">
+                        <input type="hidden" name="theme" value="dessert">
+                        <button type="submit" class="start-btn">
+                            <span class="btn-text">Start Quiz</span>
+                            <span class="btn-icon">→</span>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        
+        <footer class="footer">
+            <div class="decorative-line"></div>
+            <p>Choose a theme to begin your personality discovery journey</p>
+        </footer>
+    </div>
+    
+    <script>
+        // Add staggered animation to cards on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            const cards = document.querySelectorAll('.theme-card');
+            
+            cards.forEach((card, index) => {
+                setTimeout(() => {
+                    card.style.opacity = '0';
+                    card.style.transform = 'translateY(20px)';
+                    
+                    setTimeout(() => {
+                        card.style.transition = 'all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
+                        card.style.opacity = '1';
+                        card.style.transform = 'translateY(0)';
+                    }, 100);
+                }, index * 150);
+            });
+        });
+    </script>
+</body>
+</html>

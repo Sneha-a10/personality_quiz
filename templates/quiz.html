@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Anime Personality Quiz</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@400;600;700;800&family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="stars"></div>
+    <div class="twinkling"></div>
+    
+    <div class="container">
+        <div class="quiz-wrapper">
+            <header>
+                <h1 class="title">Which {{theme}} Are You?</h1>
+                <p class="subtitle">Discover your {{theme}} alter ego!</p>
+            </header>
+            
+            <div class="quiz-container">
+                <form action="/submit" method="post" id="quiz-form">
+                    <input type="hidden" name="theme" value="{{ theme }}">                
+                    <div class="progress-container">
+                        <div class="progress-bar" id="progress-bar"></div>
+                    </div>
+                    
+                    {% for i in range(questions|length) %}
+                        <div class="question-card" id="question-{{ i }}">
+                            <div class="question-header">
+                                <div class="question-number">
+                                    <span class="current">{{ i+1 }}</span>
+                                    <span class="total">/{{ questions|length }}</span>
+                                </div>
+                            </div>
+                            
+                            <h2 class="question-text">{{ questions[i] }}</h2>
+                            
+                            <div class="options-container">
+                                {% for opt in options[i] %}
+                                    <label class="option-label">
+                                        <input type="radio" name="q{{ i }}" value="{{ opt }}" required>
+                                        <span class="option-card">
+                                            <span class="option-text">{{ opt }}</span>
+                                            <span class="check-icon"></span>
+                                        </span>
+                                    </label>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    {% endfor %}
+                    
+                    <div class="navigation-buttons">
+                        <button type="button" id="prev-btn" onclick="prevQuestion()" class="nav-btn prev-btn">
+                            <span class="btn-icon">←</span>
+                            <span class="btn-text">Previous</span>
+                        </button>
+                        <button type="button" id="next-btn" onclick="nextQuestion()" class="nav-btn next-btn">
+                            <span class="btn-text">Next</span>
+                            <span class="btn-icon">→</span>
+                        </button>
+                        <button type="submit" id="submit-btn" class="nav-btn submit-btn">
+                            <span class="btn-text">The Big Reveal!</span>
+                            <span class="btn-icon">✨</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+            
+            <footer>
+                <div class="decorative-line"></div>
+                <p>Your {{theme}} personality awaits...</p>
+            </footer>
+        </div>
+    </div>
+    
+    <script>
+        let currentQuestion = 0;
+        const totalQuestions = {{ questions|length }};
+        const questionCards = document.querySelectorAll('.question-card');
+        const prevBtn = document.getElementById('prev-btn');
+        const nextBtn = document.getElementById('next-btn');
+        const submitBtn = document.getElementById('submit-btn');
+        const progressBar = document.getElementById('progress-bar');
+
+        function updateProgressBar() {
+            const progress = ((currentQuestion + 1) / totalQuestions) * 100;
+            progressBar.style.width = `${progress}%`;
+        }
+
+        function showQuestion(index) {
+            questionCards.forEach((card, i) => {
+                if (i === index) {
+                    card.classList.add('active');
+                    setTimeout(() => {
+                        card.classList.add('visible');
+                    }, 50);
+                } else {
+                    card.classList.remove('visible');
+                    setTimeout(() => {
+                        card.classList.remove('active');
+                    }, 300);
+                }
+            });
+            
+            prevBtn.disabled = index === 0;
+            prevBtn.classList.toggle('disabled', index === 0);
+            nextBtn.style.display = index === totalQuestions - 1 ? 'none' : 'flex';
+            submitBtn.style.display = index === totalQuestions - 1 ? 'flex' : 'none';
+            
+            updateProgressBar();
+        }
+
+        function nextQuestion() {
+            const currentRadios = document.querySelectorAll(`input[name="q${currentQuestion}"]`);
+            let answered = false;
+            
+            currentRadios.forEach(radio => {
+                if (radio.checked) {
+                    answered = true;
+                }
+            });
+            
+            if (answered && currentQuestion < totalQuestions - 1) {
+                questionCards[currentQuestion].classList.add('slide-out');
+                
+                setTimeout(() => {
+                    currentQuestion++;
+                    showQuestion(currentQuestion);
+                    questionCards[currentQuestion].classList.add('slide-in');
+                    
+                    setTimeout(() => {
+                        questionCards[currentQuestion].classList.remove('slide-in');
+                    }, 300);
+                }, 300);
+                
+                window.scrollTo({top: 0, behavior: 'smooth'});
+            } else if (!answered) {
+                document.querySelector('.options-container').classList.add('shake');
+                setTimeout(() => {
+                    document.querySelector('.options-container').classList.remove('shake');
+                }, 500);
+            }
+        }
+
+        function prevQuestion() {
+            if (currentQuestion > 0) {
+                questionCards[currentQuestion].classList.add('slide-out-right');
+                
+                setTimeout(() => {
+                    currentQuestion--;
+                    showQuestion(currentQuestion);
+                    questionCards[currentQuestion].classList.add('slide-in-left');
+                    
+                    setTimeout(() => {
+                        questionCards[currentQuestion].classList.remove('slide-in-left');
+                    }, 300);
+                }, 300);
+                
+                window.scrollTo({top: 0, behavior: 'smooth'});
+            }
+        }
+
+        // Add event listeners to option labels for better mobile experience
+        document.querySelectorAll('.option-label').forEach(label => {
+            label.addEventListener('click', function() {
+                // Remove selected class from all options in this question
+                const questionCard = this.closest('.question-card');
+                questionCard.querySelectorAll('.option-label').forEach(l => {
+                    l.classList.remove('selected');
+                });
+                
+                // Add selected class to clicked option
+                this.classList.add('selected');
+            });
+        });
+
+        // Initialize the first question
+        showQuestion(currentQuestion);
+        updateProgressBar();
+    </script>
+</body>
+</html>
