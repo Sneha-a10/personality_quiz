@@ -1,0 +1,6 @@
+hf_xet      
+Flask
+python-dotenv
+sentence-transformers
+transformers
+google-genai
