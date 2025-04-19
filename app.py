@@ -218,7 +218,7 @@ def submit():
     try:
         # Correct way to interact with the Gemini API (no 'get' needed)
         response = client.models.generate_content(
-            model="gemini-1.5-flash",  # Specify the model directly here
+            model="gemini-2.0-flash",  # Specify the model directly here
             contents=[prompt]  # The prompt as a list of contents
         ).text.strip()
 
