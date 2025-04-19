@@ -170,6 +170,7 @@ def index():
 #             best_match = name
 
 #     return render_template('result.html', character=best_match)
+
 @app.route('/submit', methods=['POST'])
 def submit():
     global questions, options, characters_by_theme
@@ -206,6 +207,7 @@ def submit():
     Personality: <1 paragraph summarizing personality and user match>
     Strengths: <comma-separated strengths>
     Quote: <famous quote>
+    
 
     Rules:
     - Only choose from the list
