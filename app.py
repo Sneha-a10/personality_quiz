@@ -1,6 +1,5 @@
 from flask import Flask, render_template, request
-from sentence_transformers import SentenceTransformer, util
-from transformers import pipeline
+from sentence_transformers import SentenceTransformer
 from dotenv import load_dotenv
 from google import genai
 import os
@@ -204,7 +203,7 @@ def submit():
 
     Return output in **this exact format**:
     Title: <character name>
-    Personality: <1 paragraph summarizing personality and user match>
+    Personality: <You are the kind of person who <summarize personality as if speaking directly to the user>. Describe what kind of person they are, comparing to the character, using "you" and "your".>
     Strengths: <comma-separated strengths>
     Quote: <famous quote>
     
@@ -216,10 +215,9 @@ def submit():
     """.strip()
 
     try:
-        # Correct way to interact with the Gemini API (no 'get' needed)
         response = client.models.generate_content(
             model="gemini-2.0-flash",  # Specify the model directly here
-            contents=[prompt]  # The prompt as a list of contents
+            contents=[prompt]
         ).text.strip()
 
         # Debugging: Print the response from Gemini
