@@ -88,18 +88,4 @@ You will also need a Google Generative AI API key.
 -   python-dotenv: A library for loading environment variables from a `.env` file.
 -   Google Generative AI API: Used for generating quiz questions and determining character matches.
 
-## Error Handling
 
-The application includes basic error handling for invalid theme selections and API-related issues. If an error occurs during the Gemini API call or result parsing, a generic error message is displayed.
-
-## Future Enhancements
-
--   Implement a more sophisticated character matching algorithm using sentence embeddings.
--   Add user authentication and store quiz results in a database.
--   Expand the range of themes and characters.
--   Improve the user interface with more styling and interactivity.
--   Implement more robust error handling and logging.
-
-## License
-
-[Choose a license, e.g., MIT License]
