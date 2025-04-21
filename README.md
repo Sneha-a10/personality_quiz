@@ -1,4 +1,4 @@
-# Personalihub
+# PersonaQuest
 
 This Flask-based application generates personality quizzes based on different themes using the Gemini API. It presents users with a series of questions and, upon submission, determines the character they most closely resemble within the selected theme.
 
